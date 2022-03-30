@@ -18,10 +18,13 @@ class Preloader extends Phaser.Scene {
 
 		var resources = {
 			'image': [
-				['title', 'img/title.png']
+				['title', 'img/title.png'],
+				['item1', 'img/item1.png']
 			],
 			'spritesheet': [
+				['platforms', 'img/platforms.png', {frameWidth:118,frameHeight:15}],
 				['button-start', 'img/button-start.png', {frameWidth:180,frameHeight:180}],
+				['button-pause', 'img/button-pause.png', {frameWidth:80,frameHeight:80}],
 				['button-settings', 'img/button-settings.png', {frameWidth:80,frameHeight:80}],
 				['loader', 'img/loader.png', {frameWidth:45,frameHeight:45}]
 			]
@@ -35,5 +38,6 @@ class Preloader extends Phaser.Scene {
     }
     create() {
 		EPT.fadeOutScene('MainMenu', this);
+		// EPT.fadeOutScene('Game', this);
 	}
 }

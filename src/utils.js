@@ -224,7 +224,7 @@ EPT.Lang = {
   },
   text: {
     'en': {
-      'FONT': 'Berlin',
+      'FONT': 'Arial',
       'settings': 'SETTINGS',
       'sound-on': 'Sound: ON',
       'sound-off': 'Sound: OFF',
@@ -305,16 +305,3 @@ EPT.Lang = {
     }
   }
 };
-
-// Usage tracking - remember to replace with your own!
-var head = document.getElementsByTagName('head')[0];
-var script = document.createElement('script');
-script.type = 'text/javascript';
-script.onload = function() {
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'UA-30485283-26');
-}
-script.src = 'https://www.googletagmanager.com/gtag/js?id=UA-30485283-26';
-head.appendChild(script);

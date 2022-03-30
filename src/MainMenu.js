@@ -1,7 +1,7 @@
 class MainMenu extends Phaser.Scene {
     constructor() {
         super('MainMenu');
-        this.bgFilesLoaded = false;
+        // this.bgFilesLoaded = false;
     }
     create() {
         this.add.sprite(0, 0, 'background').setOrigin(0,0);
@@ -9,59 +9,63 @@ class MainMenu extends Phaser.Scene {
 		EPT.Storage.initUnset('EPT-highscore', 0);
 		var highscore = EPT.Storage.get('EPT-highscore');
 
-        this.waitingForSettings = false;
+        // this.waitingForSettings = false;
 
-        var title = this.add.sprite(EPT.world.centerX, EPT.world.centerY-50, 'title');
-        title.setOrigin(0.5);
+        // var title = this.add.sprite(EPT.world.centerX, EPT.world.centerY-50, 'title');
+        // title.setOrigin(0.5);
 
         this.input.keyboard.on('keydown', this.handleKey, this);
 
-        this.tweens.add({targets: title, angle: title.angle-2, duration: 1000, ease: 'Sine.easeInOut' });
-        this.tweens.add({targets: title, angle: title.angle+4, duration: 2000, ease: 'Sine.easeInOut', yoyo: 1, loop: -1, delay: 1000 });
+        // this.tweens.add({targets: title, angle: title.angle-2, duration: 1000, ease: 'Sine.easeInOut' });
+        // this.tweens.add({targets: title, angle: title.angle+4, duration: 2000, ease: 'Sine.easeInOut', yoyo: 1, loop: -1, delay: 1000 });
 
-        this.buttonSettings = new Button(20, 20, 'button-settings', this.clickSettings, this);
-        this.buttonSettings.setOrigin(0, 0);
+  //       this.buttonSettings = new Button(20, 20, 'button-settings', this.clickSettings, this);
+  //       this.buttonSettings.setOrigin(0, 0);
 
-        var buttonEnclave = new Button(20, EPT.world.height-40, 'logo-enclave', this.clickEnclave, this, 'static');
-        buttonEnclave.setOrigin(0, 1);
+  //       var buttonEnclave = new Button(20, EPT.world.height-40, 'logo-enclave', this.clickEnclave, this, 'static');
+  //       buttonEnclave.setOrigin(0, 1);
 
-        this.buttonStart = new Button(EPT.world.width-20, EPT.world.height-20, 'button-start', this.clickStart, this);
-        this.buttonStart.setOrigin(1, 1);
+  //       this.buttonStart = new Button(EPT.world.width-20, EPT.world.height-20, 'button-start', this.clickStart, this);
+  //       this.buttonStart.setOrigin(1, 1);
 
-		var fontHighscore = { font: '38px '+EPT.text['FONT'], fill: '#ffde00', stroke: '#000', strokeThickness: 5 };
-		var textHighscore = this.add.text(EPT.world.width-30, 60, EPT.text['menu-highscore']+highscore, fontHighscore);
-		textHighscore.setOrigin(1, 0);
+		// var fontHighscore = { font: '38px '+EPT.text['FONT'], fill: '#ffde00', stroke: '#000', strokeThickness: 5 };
+		// var textHighscore = this.add.text(EPT.world.width-30, 60, EPT.text['menu-highscore']+highscore, fontHighscore);
+		// textHighscore.setOrigin(1, 0);
 
-		this.buttonStart.x = EPT.world.width+this.buttonStart.width+20;
-        this.tweens.add({targets: this.buttonStart, x: EPT.world.width-20, duration: 500, ease: 'Back'});
+		// this.buttonStart.x = EPT.world.width+this.buttonStart.width+20;
+        // this.tweens.add({targets: this.buttonStart, x: EPT.world.width-20, duration: 500, ease: 'Back'});
 
-		buttonEnclave.x = -buttonEnclave.width-20;
-        this.tweens.add({targets: buttonEnclave, x: 20, duration: 500, ease: 'Back'});
+		// buttonEnclave.x = -buttonEnclave.width-20;
+        // this.tweens.add({targets: buttonEnclave, x: 20, duration: 500, ease: 'Back'});
 
-        this.buttonSettings.y = -this.buttonSettings.height-20;
-        this.tweens.add({targets: this.buttonSettings, y: 20, duration: 500, ease: 'Back'});
+        // this.buttonSettings.y = -this.buttonSettings.height-20;
+        // this.tweens.add({targets: this.buttonSettings, y: 20, duration: 500, ease: 'Back'});
 
-        textHighscore.y = -textHighscore.height-30;
-        this.tweens.add({targets: textHighscore, y: 40, duration: 500, delay: 100, ease: 'Back'});
+        // textHighscore.y = -textHighscore.height-30;
+        // this.tweens.add({targets: textHighscore, y: 40, duration: 500, delay: 100, ease: 'Back'});
 
         this.cameras.main.fadeIn(250);
 
-        if(!this.bgFilesLoaded) {
-            this.time.addEvent({
-                delay: 500,
-                callback: function() {
-                    this.startPreloadInTheBackground();
-                },
-                callbackScope: this
-            }, this);
-        }
+        // if(!this.bgFilesLoaded) {
+        //     this.time.addEvent({
+        //         delay: 500,
+        //         callback: function() {
+        //             this.startPreloadInTheBackground();
+        //         },
+        //         callbackScope: this
+        //     }, this);
+        // }
+        this.buttonStart = new Button(EPT.world.centerX, EPT.world.centerY, 'game', this.clickStart, this);
+
+        this.add.sprite(0, 0, 'background').setOrigin(0,0).setScale(0.1);
+        this.add.sprite(EPT.world.width-20, 0, 'background').setOrigin(0.5,0).setScale(0.1);
     }
     handleKey(e) {
         switch(e.code) {
-            case 'KeyS': {
-                this.clickSettings();
-                break;
-            }
+            // case 'KeyS': {
+            //     this.clickSettings();
+            //     break;
+            // }
             case 'Enter': {
                 this.clickStart();
                 break;
@@ -97,27 +101,29 @@ class MainMenu extends Phaser.Scene {
         }
     }
     clickStart() {
-        if(this.bgFilesLoaded) {
-            EPT.Sfx.play('click');
-            if(this.loadImage) {
-                this.loadImage.destroy();
-            }
-            EPT.fadeOutScene('Story', this);
-        }
-        else {
-            var animationFrames = this.anims.generateFrameNumbers('loader');
-            animationFrames.pop();
-            this.waitingForStart = true;
-            this.buttonStart.setAlpha(0.1);
-            var loadAnimation = this.anims.create({
-                key: 'loading',
-                frames: animationFrames,
-                frameRate: 12,
-                repeat: -1
-            });
-            this.loadImage = this.add.sprite(EPT.world.width-85, EPT.world.height-85, 'loader').setOrigin(1,1).setScale(1.25);
-            this.loadImage.play('loading');
-        }
+        // if(this.bgFilesLoaded) {
+        //     EPT.Sfx.play('click');
+        //     if(this.loadImage) {
+        //         this.loadImage.destroy();
+        //     }
+        //     // EPT.fadeOutScene('Story', this);
+        //     EPT.fadeOutScene('Game', this);
+        // }
+        // else {
+        //     var animationFrames = this.anims.generateFrameNumbers('loader');
+        //     animationFrames.pop();
+        //     this.waitingForStart = true;
+        //     this.buttonStart.setAlpha(0.1);
+        //     var loadAnimation = this.anims.create({
+        //         key: 'loading',
+        //         frames: animationFrames,
+        //         frameRate: 12,
+        //         repeat: -1
+        //     });
+        //     this.loadImage = this.add.sprite(EPT.world.width-85, EPT.world.height-85, 'loader').setOrigin(1,1).setScale(1.25);
+        //     this.loadImage.play('loading');
+        // }
+        EPT.fadeOutScene('Game', this);
     }
     startPreloadInTheBackground() {
         console.log('[EPT] Starting background loading...');
