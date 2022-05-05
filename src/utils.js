@@ -224,7 +224,7 @@ EPT.Lang = {
   },
   text: {
     'en': {
-      'FONT': 'Arial',
+      'FONT': 'Comic Sans Arial',
       'settings': 'SETTINGS',
       'sound-on': 'Sound: ON',
       'sound-off': 'Sound: OFF',
@@ -264,7 +264,7 @@ EPT.Lang = {
       'screen-story-howto': 'Story / how to play\nscreen'
     },
     'pl': {
-      'FONT': 'Arial',
+      'FONT': 'Comic Sans Arial',
       'settings': 'USTAWIENIA',
       'sound-on': 'Dźwięk: WŁ.',
       'sound-off': 'Dźwięk: WYŁ.',

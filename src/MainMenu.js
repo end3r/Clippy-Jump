@@ -6,13 +6,42 @@ class MainMenu extends Phaser.Scene {
     create() {
         this.add.sprite(0, 0, 'background').setOrigin(0,0);
 
-		EPT.Storage.initUnset('EPT-highscore', 0);
-		var highscore = EPT.Storage.get('EPT-highscore');
+        this._score = 0;
+        this._clouds = null;
+        this._platforms = null;
+
+		EPT.Storage.initUnset('ClippyJump-highscore', 0);
+        // EPT.Storage.set('ClippyJump-highscore', 30);
+		var highscore = EPT.Storage.get('ClippyJump-highscore');
 
         // this.waitingForSettings = false;
 
         // var title = this.add.sprite(EPT.world.centerX, EPT.world.centerY-50, 'title');
         // title.setOrigin(0.5);
+
+        this._clouds = this.add.group();
+        this._clouds.create(150, 150, 'cloud').setOrigin(0.5);
+        this._clouds.create(550, 220, 'cloud').setOrigin(0.5);
+        this._clouds.create(350, 350, 'cloud').setOrigin(0.5);
+
+        this._platforms = this.add.group();
+        this._platforms.create(150, 750, 'platforms', 0).setOrigin(0.5);
+        this._platforms.create(550, 520, 'platforms', 0).setOrigin(0.5);
+        this._platforms.create(350, 650, 'platforms', 0).setOrigin(0.5);
+
+        this._platforms.create(110, 585, 'platforms', 0).setOrigin(0.5);
+        this._platforms.create(350, 350, 'platforms', 0).setOrigin(0.5);
+        this._platforms.create(350, 250, 'platforms', 0).setOrigin(0.5);
+
+        this._platforms.create(350, 150, 'platforms', 1).setOrigin(0.5);
+
+        this._clippy = this.add.sprite(125, EPT.world.centerY+100, 'clippy').setOrigin(0.5,1);
+        this._story = this.add.sprite(350, EPT.world.centerY+30, 'story').setScale(0.5);
+
+        // this._clouds.children.iterate(function (cloud) {
+        //     var randomDir = (Phaser.Math.Between(0, 10))-5;
+        //     cloud.dir = randomDir/10;
+        // });
 
         this.input.keyboard.on('keydown', this.handleKey, this);
 
@@ -55,10 +84,58 @@ class MainMenu extends Phaser.Scene {
         //         callbackScope: this
         //     }, this);
         // }
-        this.buttonStart = new Button(EPT.world.centerX, EPT.world.centerY, 'game', this.clickStart, this);
+        this.buttonStart = new Button(EPT.world.centerX, EPT.world.height-200, 'button-start', this.clickStart, this).setScale(0.5);
+        this.buttonStart.setOrigin(0.5);
+        this.buttonStart.setScale(0.25);
+        this.buttonStartTweenIn = this.tweens.add({targets: this.buttonStart, scale: 0.5, duration: 500, ease: 'Back'});
 
-        this.add.sprite(0, 0, 'background').setOrigin(0,0).setScale(0.1);
-        this.add.sprite(EPT.world.width-20, 0, 'background').setOrigin(0.5,0).setScale(0.1);
+        this.startTimerMod = 0;
+        this.startTimer = this.time.addEvent({ delay: 3000, loop: true, callback: function(){
+            this.startTimerMod++;
+            if(this.startTimerMod % 2) {
+                this.buttonStartTweenScaleIn = this.tweens.add({targets: this.buttonStart, scale: 0.6, duration: 100, ease: 'Linear'});
+                this.buttonStartTweenScaleOut = this.tweens.add({targets: this.buttonStart, scale: 0.5, duration: 750, delay: 100, ease: 'Back'});
+            }
+            else {
+                this.buttonStartTweenAngle1 = this.tweens.add({targets: this.buttonStart, angle: this.buttonStart.angle-30, duration: 200, ease: 'Sine.easeInOut' });
+                this.buttonStartTweenAngle2 = this.tweens.add({targets: this.buttonStart, angle: this.buttonStart.angle+60, duration: 200, ease: 'Sine.easeInOut', delay: 200 });
+                this.buttonStartTweenAngle3 = this.tweens.add({targets: this.buttonStart, angle: this.buttonStart.angle-30, duration: 200, ease: 'Sine.easeInOut', delay: 400 });
+                this.buttonStartTweenAngle4 = this.tweens.add({targets: this.buttonStart, angle: this.buttonStart.angle, duration: 200, ease: 'Sine.easeInOut', delay: 600 });
+            }
+        }, callbackScope: this});
+
+        this.storyTweenMoveDown = this.tweens.add({targets: this._story, y: this._story.y-10, duration: 2000, ease: 'Linear'});
+        this.storyTweenMoveUp = this.tweens.add({targets: this._story, y: this._story.y, duration: 2000, delay: 2000, ease: 'Linear'});
+        this.startTimerStory = this.time.addEvent({ delay: 4000, loop: true, callback: function(){
+                this.storyTweenMoveDown = this.tweens.add({targets: this._story, y: this._story.y-10, duration: 2000, ease: 'Linear'});
+                this.storyTweenMoveUp = this.tweens.add({targets: this._story, y: this._story.y, duration: 2000, delay: 2000, ease: 'Linear'});
+        }, callbackScope: this});
+
+        var fontScore = { font: '42px '+EPT.text['FONT'], fill: '#1978ca' };
+        var fontScoreWhite =  { font: '42px '+EPT.text['FONT'], fill: '#000', stroke: '#ffde00', strokeThickness: 5 };
+        this.textScore = this.add.text(25, 20, highscore, fontScore);
+        this.textScore.setOrigin(0,0);
+        this.textScore.y = -this.textScore.height-20;
+        this.tweens.add({targets: this.textScore, y: 20, duration: 500, delay: 0, ease: 'Back'});
+
+        this.buttonSettings = new Button(EPT.world.width-20, EPT.world.height-20, 'button-settings', this.clickSettings, this).setScale(0.5);
+        this.buttonSettings.setOrigin(1,1);
+        this.buttonSettings.y = EPT.world.height+this.buttonSettings.height+20;
+        this.tweens.add({targets: this.buttonSettings, y: EPT.world.height-20, duration: 500, delay: 100, ease: 'Back'});        
+
+        // this.add.sprite(0, 0, 'background').setOrigin(0,0).setScale(0.1);
+        // this.add.sprite(EPT.world.width-20, 0, 'background').setOrigin(0.5,0).setScale(0.1);
+    }
+    update() {
+        // this._clouds.children.iterate(function (cloud) {
+        //     cloud.x += cloud.dir;
+        //     if(cloud.x-cloud.width/2 > EPT.world.width) {
+        //         cloud.x = -cloud.width/2;
+        //     }
+        //     if(cloud.x+cloud.width/2 < 0) {
+        //         cloud.x = EPT.world.width+cloud.width/2;
+        //     }
+        // });
     }
     handleKey(e) {
         switch(e.code) {
